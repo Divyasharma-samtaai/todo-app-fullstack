@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Todo } from "./types/Todo";
 import { api } from "./services/Api";
+import TodoList from "./components/TodoList";
 
 const App = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -21,7 +22,7 @@ const App = () => {
   return (
     <div>
       <h1>Todo App</h1>
-      <h1>Todo Count: {todos.length}</h1>
+      <TodoList todos={todos} />
     </div>
   );
 };
