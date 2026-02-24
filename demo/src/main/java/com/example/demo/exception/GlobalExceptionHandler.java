@@ -1,0 +1,53 @@
+package com.example.demo.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    // 1️⃣ Handle Resource Not Found (404)
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, Object> handleResourceNotFound(ResourceNotFoundException ex) {
+
+        Map<String, Object> error = new HashMap<>();
+        error.put("status", 404);
+        error.put("error", "Not Found");
+        error.put("message", ex.getMessage());
+
+        return error;
+    }
+
+    // 2️⃣ Handle Validation Errors (400)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, Object> handleValidationException(MethodArgumentNotValidException ex) {
+
+        Map<String, Object> error = new HashMap<>();
+        error.put("status", 400);
+        error.put("error", "Bad Request");
+        error.put("message", ex.getBindingResult()
+                               .getFieldError()
+                               .getDefaultMessage());
+
+        return error;
+    }
+
+    // 3️⃣ Handle All Other Exceptions (500)
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Map<String, Object> handleGlobalException(Exception ex) {
+
+        Map<String, Object> error = new HashMap<>();
+        error.put("status", 500);
+        error.put("error", "Internal Server Error");
+        error.put("message", ex.getMessage());
+
+        return error;
+    }
+}
