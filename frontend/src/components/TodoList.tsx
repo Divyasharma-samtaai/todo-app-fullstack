@@ -1,4 +1,5 @@
 import type { Todo } from "../types/Todo";
+import TodoItem from "./TodoItem";
 
 interface TodoListProps {
   todos: Todo[];
@@ -13,14 +14,7 @@ export default function TodoList({ todos }: TodoListProps) {
       ) : (
         <ul>
           {todos.map((todo) => (
-            <li
-              key={todo.id}
-              style={{
-                textDecoration: todo.completed ? "line-through" : "none",
-              }}
-            >
-              {todo.title}
-            </li>
+            <TodoItem key={todo.id} todo={todo} />
           ))}
         </ul>
       )}
