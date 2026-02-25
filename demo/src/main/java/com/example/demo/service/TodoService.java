@@ -2,7 +2,7 @@ package com.example.demo.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Todo;
@@ -12,8 +12,11 @@ import com.example.demo.repository.TodoRepository;
 @Service
 public class TodoService {
 
-    @Autowired
-    private TodoRepository repository;
+    private final TodoRepository repository;
+
+        public TodoService(TodoRepository repository) {
+        this.repository = repository;
+    }
 
     public Todo createTodo(Todo todo) {
         return repository.save(todo);
@@ -32,15 +35,13 @@ public Todo getTodoById(Long id) {
             .orElseThrow(() -> new ResourceNotFoundException("Todo not found with id " + id));
 }
 
-public Todo updateTodo(Long id, Todo updatedTodo) {
-    Todo existing = repository.findById(id).orElse(null);
+    public Todo updateTodo(Long id, Todo updatedTodo) {
+        Todo existingTodo = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Todo not found"));
 
-    if (existing != null) {
-        existing.setTitle(updatedTodo.getTitle());
-        existing.setCompleted(updatedTodo.isCompleted());
-        return repository.save(existing);
+        existingTodo.setTitle(updatedTodo.getTitle());
+        existingTodo.setCompleted(updatedTodo.isCompleted());
+
+        return repository.save(existingTodo);
     }
-
-    return null;
-}
 }

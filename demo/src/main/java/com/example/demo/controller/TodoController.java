@@ -10,9 +10,10 @@ import com.example.demo.service.TodoService;
 
 import jakarta.validation.Valid;
 
+
 @RestController
 @RequestMapping("/todos")
-@CrossOrigin(origins = "http://localhost:5173")
+
 public class TodoController {
 
     @Autowired
@@ -24,7 +25,7 @@ public class TodoController {
     // }
 
     @PostMapping
-public Todo createTodo(@Valid @RequestBody Todo todo) {
+    public Todo createTodo(@Valid @RequestBody Todo todo) {
     return service.createTodo(todo);
 }
 
@@ -39,12 +40,12 @@ public Todo createTodo(@Valid @RequestBody Todo todo) {
     }
 
     @GetMapping("/{id}")
-public Todo getById(@PathVariable Long id) {
+    public Todo getById(@PathVariable Long id) {
     return service.getTodoById(id);
-}
+    }
 
-@PutMapping("/{id}")
-public Todo update(@PathVariable Long id, @RequestBody Todo todo) {
-    return service.updateTodo(id, todo);
-}
+    @PutMapping("/{id}")
+    public Todo update(@PathVariable Long id, @RequestBody Todo todo) {
+        return service.updateTodo(id, todo);
+    }
 }
