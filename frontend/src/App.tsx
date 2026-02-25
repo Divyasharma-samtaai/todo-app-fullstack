@@ -3,6 +3,7 @@ import type { Todo } from "./types/Todo";
 import { api } from "./services/Api";
 import TodoList from "./components/TodoList";
 import TodoForm from "./components/TodoForm";
+import "./App.css";
 
 const App = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -31,6 +32,19 @@ const App = () => {
     }
   };
 
+  const handleToggle = async (todo: Todo) => {
+    try {
+      const updated = await api.updateTodo(todo.id, {
+        title: todo.title,
+        completed: !todo.completed,
+      });
+
+      setTodos((prev) => prev.map((t) => (t.id === todo.id ? updated : t)));
+    } catch (error) {
+      console.error("Error updating todo:", error);
+    }
+  };
+
   const handleAdd = async (title: string) => {
     try {
       setError(null);
@@ -53,7 +67,7 @@ const App = () => {
       {error && <p className="error-message">{error}</p>}
 
       <TodoForm onAdd={handleAdd} />
-      <TodoList todos={todos} onDelete={handleDelete} />
+      <TodoList todos={todos} onDelete={handleDelete} onToggle={handleToggle} />
     </div>
   );
 };

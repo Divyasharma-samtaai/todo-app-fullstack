@@ -22,6 +22,11 @@ export const api = {
     return response.data; // VERY IMPORTANT
   },
 
+  async updateTodo(id: number, todo: Omit<Todo, "id">): Promise<Todo> {
+    const response = await axiosInstance.put(`/${id}`, todo);
+    return response.data;
+  },
+
   async deleteTodo(id: number): Promise<void> {
     await axiosInstance.delete(`/${id}`);
   },
