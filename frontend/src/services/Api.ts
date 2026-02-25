@@ -2,22 +2,27 @@
 import axios from "axios";
 import type { Todo } from "../types/Todo";
 
-const API_BASE_URL = "http://localhost:8080";
+const BASE_URL = "http://localhost:8080/todos";
+
+const axiosInstance = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
 export const api = {
-  getTodos: async (): Promise<Todo[]> => {
-    const response = await axios.get(`${API_BASE_URL}/todos`);
+  async getTodos(): Promise<Todo[]> {
+    const response = await axiosInstance.get("");
     return response.data;
   },
-  createTodo: async (todo: Todo): Promise<Todo> => {
-    const response = await axios.post(`${API_BASE_URL}/todos`, todo);
-    return response.data;
+
+  async createTodo(todo: Omit<Todo, "id">): Promise<Todo> {
+    const response = await axiosInstance.post("", todo);
+    return response.data; // VERY IMPORTANT
   },
-  updateTodo: async (id: number, todo: Todo): Promise<Todo> => {
-    const response = await axios.put(`${API_BASE_URL}/todos/${id}`, todo);
-    return response.data;
-  },
-  deleteTodo: async (id: number): Promise<void> => {
-    await axios.delete(`${API_BASE_URL}/todos/${id}`);
+
+  async deleteTodo(id: number): Promise<void> {
+    await axiosInstance.delete(`/${id}`);
   },
 };
